@@ -20,7 +20,6 @@ class CreateEmployeesTable extends Migration
             $table->string('last_name');
             $table->enum('sex', ['male', 'female'])->nullable();
             $table->integer('salary')->nullable();
-            $table->timestamps();
         });
     }
 
