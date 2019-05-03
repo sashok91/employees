@@ -32,6 +32,7 @@
                 </div>
             </div>
         </div>
+
         <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse">
             <div class="container">
                 <div class="row align-items-center">
@@ -42,7 +43,7 @@
                                 <a href="/" class="nav-link"><i class="fe fe-hash"></i> Сетка</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/" class="nav-link"><i class="fe fe-users"></i> Сотрудники</a>
+                                <a href="/employees" class="nav-link"><i class="fe fe-users"></i> Сотрудники</a>
                             </li>
                             <li class="nav-item">
                                 <a href="/" class="nav-link"><i class="fe fe-home"></i> Отделы</a>
@@ -53,12 +54,15 @@
             </div>
         </div>
 
-        <footer class="footer">
-            <div class="container">
-                <div class="text-center">
-                    Copyright © 2018 <a href="/">Employees</a>. All rights reserved.
-                </div>
+        @yield('page-content')
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="text-center">
+                Copyright © 2018 <a href="/">Employees</a>. All rights reserved.
             </div>
-        </footer>
+        </div>
+    </footer>
 
 @endsection
