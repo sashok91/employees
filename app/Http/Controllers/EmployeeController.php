@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Department;
 use App\Employee;
 use Illuminate\Http\Request;
 
@@ -26,8 +27,11 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = $this->employeeModel->paginate(3);
-        return view('employees-list', ['employees' => $employees]);
+        $paginatedEmployees = $this->employeeModel->with('departments')->paginate(3);
+
+        return view('employees-list', [
+            'employees' =>  $paginatedEmployees
+        ]);
     }
 
     /**
@@ -37,7 +41,10 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employee-create');
+        $departments = Department::all();
+        return view('employee-create', [
+            'departments' => $departments
+        ]);
     }
 
     /**
@@ -48,7 +55,22 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'sex' => 'in:male,female',
+            'salary' => 'integer',
+            'departments' => 'required|array'
+        ]);
+
+        $employee = $this->employeeModel->create($request->toArray());
+
+        $employee->departments()->attach($request->departments);
+
+        return response()->json([
+            'success' => true,
+            'employee' => $employee
+        ]);
     }
 
     /**
@@ -70,8 +92,12 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        $employee = $this->employeeModel->find($id);
-        return view('employee-edit', $employee);
+        $employee = $this->employeeModel->with('departments')->find($id);
+        $departments = Department::all();
+        return view('employee-edit', [
+            'employee' => $employee,
+            'departments' => $departments
+        ]);
     }
 
     /**
@@ -83,7 +109,41 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'sex' => 'in:male,female',
+            'salary' => 'integer',
+            'departments' => 'required|array'
+        ]);
+
+        $employee = $this->employeeModel->find($id);
+        if ($employee) {
+
+            $employee->first_name = $request->first_name;
+            if (isset($request->middle_name)) {
+                $employee->middle_name = $request->middle_name;
+            }
+            $employee->last_name = $request->last_name;
+            if (isset($request->sex)) {
+                $employee->sex = $request->sex;
+            }
+            if (isset($request->salary)) {
+                $employee->salary = $request->salary;
+            }
+
+            $employee->departments()->detach();
+            $employee->departments()->attach($request->departments);
+
+            return response()->json([
+                'success' => true,
+                'employee' => $employee
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Сотрудник не найден'
+        ], 404);
     }
 
     /**
@@ -94,7 +154,13 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        $this->employeeModel->destroy($id);
-        return redirect()->route('employees.index');
+        try {
+            $this->employeeModel->destroy($id);
+        }
+        catch (\Exception $e) {
+            return redirect()->route('employees.index')->with('errorMessage', $e->getMessage());
+        }
+
+        return redirect()->route('employees.index')->with('successMessage', 'Сотрудник удален');
     }
 }

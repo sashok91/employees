@@ -9,12 +9,26 @@
         </div>
         <div class="col-12">
             <div class="mb-2 text-right">
-                <a href="/employees/create" data-toggle="tooltip"
-                   title="Добавить сотрудника"
-                   class="btn btn-icon btn-primary">
-                    <i class="fe fe-plus"></i>
+                <a href="/employees/create" class="btn btn-primary">
+                    Добавить сотрудника
                 </a>
             </div>
+
+            @if(session('successMessage'))
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert"></button>
+                    Сотрудник был удален.
+                </div>
+            @endif
+
+            @if(session('errorMessage'))
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert"></button>
+                    При удалении сотрудника произошла ошибка.
+                    <br>
+                    {{ session('errorMessage') }}
+                </div>
+            @endif
 
             @if(!(isset($employees) && count($employees)))
                 <span>В списке нет ни одного сотрудника.</span>
