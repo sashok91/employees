@@ -12,8 +12,10 @@ class Employee extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'first_name', 'middle_name', 'last_name', 'sex', 'salary'
     ];
+
+    public $timestamps = false;
 
     public function departments()
     {

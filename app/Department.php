@@ -15,6 +15,8 @@ class Department extends Model
         'name'
     ];
 
+    public $timestamps = false;
+
     public function employees()
     {
         return $this->belongsToMany(Employee::class, 'employee_department');
