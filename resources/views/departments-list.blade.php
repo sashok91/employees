@@ -73,34 +73,9 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal modal-danger fade" id="deletedepartment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <form method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <div class="modal-body">
-                        <p class="text-center">
-                            Вы действительно хотите удалить отдел?
-                        </p>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-dismiss="modal">Отмена</button>
-                        <button type="submit" class="btn btn-warning">Удалить</button>
-                    </div>
-                </form>
-
-
-            </div>
-        </div>
-    </div>
-
-
+    @component('components.delete-modal', ['id' => 'deletedepartment'])
+        Вы действительно хотите удалить отдел?
+    @endcomponent
 
 @endsection
 
