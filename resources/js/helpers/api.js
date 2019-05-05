@@ -10,13 +10,6 @@ export default {
         return axios.post(`/employees`, params);
     },
 
-    removeEmployee(id) {
-        let params = {
-            _method: 'delete'
-        };
-        return axios.post(`/employees/${id}`, params);
-    },
-
     updateDepartment(id, params) {
         return axios.put(`/departments/${id}`, params);
     },

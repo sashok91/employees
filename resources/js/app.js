@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import 'bootstrap';
 
 
 Vue.component('employee-form', require('./components/EmployeeForm.vue').default);

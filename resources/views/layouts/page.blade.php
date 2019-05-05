@@ -3,7 +3,8 @@
 @section('page')
 
     <div class="page-main">
-        <div class="header py-4">
+
+        <!--<div class="header py-4">
             <div class="container">
                 <div class="d-flex">
                     <a class="header-brand" href="/">
@@ -32,6 +33,7 @@
                 </div>
             </div>
         </div>
+        -->
 
         <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse">
             <div class="container">
