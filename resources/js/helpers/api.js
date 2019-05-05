@@ -15,6 +15,14 @@ export default {
             _method: 'delete'
         };
         return axios.post(`/employees/${id}`, params);
-    }
+    },
+
+    updateDepartment(id, params) {
+        return axios.put(`/departments/${id}`, params);
+    },
+
+    createDepartment(params) {
+        return axios.post(`/departments`, params);
+    },
 
 }

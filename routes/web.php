@@ -16,5 +16,6 @@ Route::get('/', function () {
 });
 
 Route::resources([
-    'employees' => 'EmployeeController'
+    'employees' => 'EmployeeController',
+    'departments' => 'DepartmentController'
 ]);
