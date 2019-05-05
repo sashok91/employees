@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card scrollable-x">
         <table class="table card-table table-vcenter">
             <tr>
                 <th></th>
@@ -67,5 +67,7 @@
 </script>
 
 <style scoped>
-
+    .scrollable-x {
+        overflow-x: scroll;
+    }
 </style>
