@@ -130,6 +130,8 @@ class EmployeeController extends Controller
             }
             $employee->salary = $request->salary;
 
+            $employee->save();
+
             $employee->departments()->detach();
             $employee->departments()->attach($request->departments);
 
