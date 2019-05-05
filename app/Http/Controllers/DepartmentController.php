@@ -25,7 +25,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $departments = $this->dModel->departmensWithStats()->paginate(2);;
+        $departments = $this->dModel->departmensWithStats()->paginate(8);;
         return view('departments-list', [
             'departments' => $departments
         ]);

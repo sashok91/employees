@@ -27,7 +27,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $paginatedEmployees = $this->employeeModel->with('departments')->paginate(3);
+        $paginatedEmployees = $this->employeeModel->with('departments')->paginate(8);
 
         return view('employees-list', [
             'employees' => $paginatedEmployees
