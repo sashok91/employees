@@ -46,7 +46,7 @@
                                 <a href="/employees" class="nav-link"><i class="fe fe-users"></i> Сотрудники</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/" class="nav-link"><i class="fe fe-home"></i> Отделы</a>
+                                <a href="/departments" class="nav-link"><i class="fe fe-home"></i> Отделы</a>
                             </li>
                         </ul>
                     </div>
