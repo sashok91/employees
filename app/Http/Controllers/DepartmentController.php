@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Department;
+use App\Http\Requests\SaveDepartment;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
@@ -47,12 +48,8 @@ class DepartmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaveDepartment $request)
     {
-        $this->validate($request, [
-            'name' => 'required|string'
-        ]);
-
         $department = $this->dModel->create($request->toArray());
 
         return response()->json([
@@ -89,16 +86,12 @@ class DepartmentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param SaveDepartment $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SaveDepartment $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required|string'
-        ]);
-
         $department = $this->dModel->find($id);
         if ($department) {
 

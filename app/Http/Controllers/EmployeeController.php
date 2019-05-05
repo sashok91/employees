@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use App\Employee;
+use App\Http\Requests\SaveEmployee;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -53,17 +54,8 @@ class EmployeeController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaveEmployee $request)
     {
-        $this->validate($request, [
-            'first_name' => 'required|string',
-            'middle_name' => 'nullable|string',
-            'last_name' => 'required|string',
-            'sex' => 'nullable|in:male,female',
-            'salary' => 'nullable|integer',
-            'departments' => 'required|array'
-        ]);
-
         $employee = $this->employeeModel->create($request->toArray());
 
         $employee->departments()->attach($request->departments);
@@ -108,17 +100,8 @@ class EmployeeController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SaveEmployee $request, $id)
     {
-        $this->validate($request, [
-            'first_name' => 'required|string',
-            'middle_name' => 'nullable|string',
-            'last_name' => 'required|string',
-            'sex' => 'nullable|in:male,female',
-            'salary' => 'nullable|integer',
-            'departments' => 'required|array'
-        ]);
-
         $employee = $this->employeeModel->find($id);
         if ($employee) {
 
