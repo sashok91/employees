@@ -40,6 +40,7 @@
     <link href="{{ asset('assets/css/dashboard.css') }}" rel="stylesheet"/>
     <script src="{{ asset('assets/js/dashboard.js') }}"></script>
 
+    @yield('scripts')
 </head>
 <body>
 <div id="app" class="page">

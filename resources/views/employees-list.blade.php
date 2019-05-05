@@ -66,21 +66,18 @@
                                     @endforeach
                                 </td>
                                 <td class="text-right">
-
-                                    <form action="/employees/{{$employee->id}}" method="POST"
-                                          onsubmit="return confirm('Вы хотите удалить сотрудника?');">
-                                        @csrf
-                                        @method('DELETE')
+                                    <div>
                                         <a href="/employees/{{$employee->id}}/edit" data-toggle="tooltip"
                                            title="Редактировать"
                                            class="btn btn-icon btn-primary">
                                             <i class="fe fe-edit"></i>
                                         </a>
-                                        <button type="submit" data-toggle="tooltip" title="Удалить"
+                                        <button data-toggle="modal" title="Удалить"
+                                                data-target="#deleteemployee" data-employeeid="{{$employee->id}}"
                                                 class="btn btn-icon btn-danger">
                                             <i class="fe fe-trash"></i>
                                         </button>
-                                    </form>
+                                    </div>
 
                                 </td>
                             </tr>
@@ -92,4 +89,46 @@
 
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal modal-danger fade" id="deleteemployee" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body">
+                        <p class="text-center">
+                            Вы действительно хотите удалить сотрудника?
+                        </p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Удалить</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+@endsection
+
+@section('scripts')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#deleteemployee').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget);
+                let employeeId = button.data('employeeid');
+                let modal = $(this);
+                modal.find('form')[0].action = '/employees/' + employeeId;
+            });
+        });
+    </script>
 @endsection
