@@ -6,7 +6,7 @@
                 {{successMessages[mode]}}
             </div>
             <div class="form-group">
-                <label class="form-label">Имя</label>
+                <label class="form-label">Имя*</label>
                 <input type="text" v-model="editableEmployee.first_name" class="form-control" placeholder="Введите имя">
                 <div v-if="checkError('first_name')" class="error-text">
                     {{errors.first_name[0]}}
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">Фамилия</label>
+                <label class="form-label">Фамилия*</label>
                 <input type="text" v-model="editableEmployee.last_name" class="form-control" placeholder="Введите фамилию">
                 <div v-if="checkError('last_name')" class="error-text">
                     {{errors.last_name[0]}}
@@ -51,7 +51,7 @@
             </div>
 
             <div class="form-group">
-                <div class="form-label">Отделы</div>
+                <div class="form-label">Отделы*</div>
                 <div v-if="allDepartments && allDepartments.length" class="custom-controls-stacked">
                     <label class="custom-control custom-checkbox"
                            v-for="department in allDepartments ">
@@ -151,6 +151,7 @@
                         api.createEmployee(params).then((resp) => {
                             this.clearForm();
                             this.isSuccess = true;
+                            window.scrollTo(0,0);
                         }).catch((e) => {
                             this.errors = e.response.data.errors;
                         });
@@ -160,6 +161,7 @@
                         api.updateEmployee(id, params).then((resp) => {
                             this.isSuccess = true;
                             this.errors = {}
+                            window.scrollTo(0,0);
                         }).catch((e) => {
                             this.errors = e.response.data.errors;
                         });
