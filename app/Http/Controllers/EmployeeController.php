@@ -30,7 +30,7 @@ class EmployeeController extends Controller
         $paginatedEmployees = $this->employeeModel->with('departments')->paginate(3);
 
         return view('employees-list', [
-            'employees' =>  $paginatedEmployees
+            'employees' => $paginatedEmployees
         ]);
     }
 
@@ -50,16 +50,17 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $this->validate($request, [
             'first_name' => 'required|string',
+            'middle_name' => 'nullable|string',
             'last_name' => 'required|string',
-            'sex' => 'in:male,female',
-            'salary' => 'integer',
+            'sex' => 'nullable|in:male,female',
+            'salary' => 'nullable|integer',
             'departments' => 'required|array'
         ]);
 
@@ -76,7 +77,7 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -87,7 +88,7 @@ class EmployeeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -103,17 +104,18 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             'first_name' => 'required|string',
+            'middle_name' => 'nullable|string',
             'last_name' => 'required|string',
-            'sex' => 'in:male,female',
-            'salary' => 'integer',
+            'sex' => 'nullable|in:male,female',
+            'salary' => 'nullable|integer',
             'departments' => 'required|array'
         ]);
 
@@ -121,16 +123,12 @@ class EmployeeController extends Controller
         if ($employee) {
 
             $employee->first_name = $request->first_name;
-            if (isset($request->middle_name)) {
-                $employee->middle_name = $request->middle_name;
-            }
+            $employee->middle_name = $request->middle_name;
             $employee->last_name = $request->last_name;
             if (isset($request->sex)) {
                 $employee->sex = $request->sex;
             }
-            if (isset($request->salary)) {
-                $employee->salary = $request->salary;
-            }
+            $employee->salary = $request->salary;
 
             $employee->departments()->detach();
             $employee->departments()->attach($request->departments);
@@ -149,15 +147,14 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         try {
             $this->employeeModel->destroy($id);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->route('employees.index')->with('errorMessage', $e->getMessage());
         }
 
