@@ -24,9 +24,9 @@ class SaveEmployee extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string',
-            'middle_name' => 'nullable|string',
-            'last_name' => 'required|string',
+            'first_name' => 'required|string|max:50',
+            'middle_name' => 'nullable|string|max:50',
+            'last_name' => 'required|string|max:50',
             'sex' => 'nullable|in:male,female',
             'salary' => 'nullable|integer',
             'departments' => 'required|array'

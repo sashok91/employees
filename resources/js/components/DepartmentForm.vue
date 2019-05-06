@@ -1,16 +1,18 @@
 <template>
     <form class="card">
         <div class="card-body p-6">
-            <div v-if="isSuccess" class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert"></button>
+            <alert-success v-if="isSuccess">
                 {{successMessages[mode]}}
-            </div>
+            </alert-success>
+            <alert-fail v-if="isFailed">
+                {{error.message}}
+            </alert-fail>
             <div class="form-group">
                 <label class="form-label">Название отдела*</label>
                 <input type="text" v-model="editableDepartment.name" class="form-control"
                        placeholder="Введите название отдела">
                 <div v-if="checkError('name')" class="error-text">
-                    {{errors.name[0]}}
+                    {{error.errors.name[0]}}
                 </div>
             </div>
             <div class="form-footer text-right">
@@ -22,9 +24,12 @@
 
 <script>
     import api from '../helpers/api';
+    import AlertSuccess from './AlertSuccess.vue';
+    import AlertFail from './AlertFail.vue';
 
     export default {
         name: "DepartmentForm",
+        components: {AlertSuccess, AlertFail},
         props: {
             // json
             department: String,
@@ -39,7 +44,11 @@
                 editableDepartment: {
                     name: ''
                 },
-                errors: {},
+                error: {
+                    message: '',
+                    errors: {}
+                },
+                isFailed: false,
                 isSuccess: false,
                 successMessages: {
                     'create': 'Отдел был добавлен. Вы можете добавить еще один отдел или просмотреть весь список в разделе "Отделы".',
@@ -54,20 +63,21 @@
         },
         methods: {
             checkError(field) {
-                return this.errors.hasOwnProperty(field);
+                return this.error && this.error.errors && this.error.errors.hasOwnProperty(field);
             },
 
             clearForm() {
                 this.editableDepartment = {
                     name: ''
                 };
-                this.errors = {};
+                this.error = {};
             },
 
             save() {
                 let params = this.editableDepartment;
 
                 this.isSuccess = false;
+                this.isFailed = false;
 
                 switch (this.mode) {
                     case 'create':
@@ -75,16 +85,18 @@
                             this.clearForm();
                             this.isSuccess = true;
                         }).catch((e) => {
-                            this.errors = e.response.data.errors;
+                            this.error = e.response.data;
+                            this.isFailed = true;
                         });
                         break;
                     case 'update':
                         let id = this.editableDepartment ? this.editableDepartment.id : '';
                         api.updateDepartment(id, params).then((resp) => {
                             this.isSuccess = true;
-                            this.errors = {}
+                            this.error = {}
                         }).catch((e) => {
-                            this.errors = e.response.data.errors;
+                            this.error = e.response.data;
+                            this.isFailed = true;
                         });
                         break;
                     default:
@@ -97,10 +109,5 @@
 </script>
 
 <style scoped>
-    .error-text {
-        width: 100%;
-        margin-top: 0.25rem;
-        font-size: 87.5%;
-        color: #e2201f;
-    }
+
 </style>

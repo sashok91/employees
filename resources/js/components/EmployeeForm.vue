@@ -1,36 +1,38 @@
 <template>
     <form class="card" >
         <div class="card-body p-6">
-            <div v-if="isSuccess" class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert"></button>
+            <alert-success v-if="isSuccess">
                 {{successMessages[mode]}}
-            </div>
+            </alert-success>
+            <alert-fail v-if="isFailed">
+                {{error.message}}
+            </alert-fail>
             <div class="form-group">
                 <label class="form-label">Имя*</label>
                 <input type="text" v-model="editableEmployee.first_name" class="form-control" placeholder="Введите имя">
                 <div v-if="checkError('first_name')" class="error-text">
-                    {{errors.first_name[0]}}
+                    {{error.errors.first_name[0]}}
                 </div>
             </div>
             <div class="form-group">
                 <label class="form-label">Отчество</label>
                 <input type="text" v-model="editableEmployee.middle_name" class="form-control" placeholder="Введите отчество">
                 <div v-if="checkError('middle_name')" class="error-text">
-                    {{errors.middle_name[0]}}
+                    {{error.errors.middle_name[0]}}
                 </div>
             </div>
             <div class="form-group">
                 <label class="form-label">Фамилия*</label>
                 <input type="text" v-model="editableEmployee.last_name" class="form-control" placeholder="Введите фамилию">
                 <div v-if="checkError('last_name')" class="error-text">
-                    {{errors.last_name[0]}}
+                    {{error.errors.last_name[0]}}
                 </div>
             </div>
             <div class="form-group">
                 <label class="form-label">Заработная плата</label>
                 <input type="text" v-model="editableEmployee.salary" class="form-control" placeholder="Введите целое число">
                 <div v-if="checkError('salary')" class="error-text">
-                    {{errors.salary[0]}}
+                    {{error.errors.salary[0]}}
                 </div>
             </div>
             <div class="form-group">
@@ -46,7 +48,7 @@
                     </label>
                 </div>
                 <div v-if="checkError('sex')" class="error-text">
-                    {{errors.sex[0]}}
+                    {{error.errors.sex[0]}}
                 </div>
             </div>
 
@@ -73,9 +75,12 @@
 
 <script>
     import api from '../helpers/api';
+    import AlertSuccess from './AlertSuccess.vue';
+    import AlertFail from './AlertFail.vue';
 
     export default {
         name: "EmployeeForm",
+        components: {AlertSuccess, AlertFail},
         props: {
             // json
             employee: String,
@@ -101,8 +106,12 @@
                 },
                 checkedDepartments: [],
                 allDepartments: [],
-                errors: [],
+                error: {
+                    message: '',
+                    errors: {}
+                },
                 isSuccess: false,
+                isFailed: false,
                 successMessages: {
                     'create': 'Сотрудник был добавлен. Вы можете добавить еще одного сотрудника или просмотреть весь список в разделе "Сотрудники".',
                     'update': 'Информация о сотруднике была изменена.'
@@ -123,7 +132,7 @@
         },
         methods: {
             checkError(field) {
-                return this.errors.hasOwnProperty(field);
+                return this.error && this.error.errors && this.error.errors.hasOwnProperty(field);
             },
 
             clearForm() {
@@ -153,17 +162,19 @@
                             this.isSuccess = true;
                             window.scrollTo(0,0);
                         }).catch((e) => {
-                            this.errors = e.response.data.errors;
+                            this.error = e.response.data;
+                            this.isFailed = true;
                         });
                         break;
                     case 'update':
                         let id = this.editableEmployee ? this.editableEmployee.id : '';
                         api.updateEmployee(id, params).then((resp) => {
                             this.isSuccess = true;
-                            this.errors = {}
+                            this.error= {};
                             window.scrollTo(0,0);
                         }).catch((e) => {
-                            this.errors = e.response.data.errors;
+                            this.error = e.response.data;
+                            this.isFailed = true;
                         });
                         break;
                     default:
@@ -177,10 +188,5 @@
 </script>
 
 <style scoped>
-    .error-text {
-        width: 100%;
-        margin-top: 0.25rem;
-        font-size: 87.5%;
-        color: #e2201f;
-    }
+
 </style>
